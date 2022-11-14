@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorContro
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
@@ -27,8 +28,8 @@ public class ApiVersionHandlerMapping extends RequestMappingHandlerMapping
     @Override
     protected boolean isHandler(Class<?> beanType)
     {
-        return AnnotatedElementUtils.hasAnnotation(beanType, Controller.class)
-                && !beanType.equals(BasicErrorController.class);
+        return (AnnotatedElementUtils.hasAnnotation(beanType, Controller.class) ||
+                AnnotatedElementUtils.hasAnnotation(beanType, RequestMapping.class));
     }
 
     @Override
@@ -52,6 +53,11 @@ public class ApiVersionHandlerMapping extends RequestMappingHandlerMapping
     {
         Class<?> controllerClass = method.getDeclaringClass();
         String[] apiVersionPatterns;
+
+        if (controllerClass.equals(BasicErrorController.class))
+        {
+            return new String[0];
+        }
 
         // 类上的注解
         ApiVersion apiVersion = AnnotationUtils.findAnnotation(controllerClass, ApiVersion.class);
