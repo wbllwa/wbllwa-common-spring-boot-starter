@@ -1,0 +1,8 @@
+
+#minio:
+#  access-key: root
+#  secret-key: 1234qwer
+#  endpoint: http://192.190.10.182:9800
+#  bucket: test
+
+debug: true

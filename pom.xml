@@ -46,5 +46,12 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!-- 分布式文件存储 -->
+		<dependency>
+			<groupId>io.minio</groupId>
+			<artifactId>minio</artifactId>
+			<version>8.4.3</version>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 </project>
