@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 响应体包装
+ * 响应体包装 （外部系统强制使用）
  * @RestControllerAdvice + @ExceptionHandler 处理全局异常
  * ResponseBodyAdvice 对controller返回响应进行包装
  * @author libw

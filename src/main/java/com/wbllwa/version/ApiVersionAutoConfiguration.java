@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  */
 @ConditionalOnProperty(prefix = "api.version", name = "enabled", havingValue = "true", matchIfMissing = false)
 @EnableConfigurationProperties(ApiVersionProperties.class)
-public class ApiVersionRegistration implements WebMvcRegistrations
+public class ApiVersionAutoConfiguration implements WebMvcRegistrations
 {
     /**
      * 加载自定义ApiVersionHandlerMapping
