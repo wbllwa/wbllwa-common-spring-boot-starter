@@ -38,7 +38,7 @@ public class ApiResponse<T>
      * @param <T>
      * @return
      */
-    public static <T> ApiResponse<Object> success(T data)
+    public static <T> ApiResponse<T> success(T data)
     {
         return new ApiResponse<>(true, data, 0, "");
     }
@@ -47,10 +47,9 @@ public class ApiResponse<T>
      * 失败响应
      * @param code
      * @param message
-     * @param <T>
      * @return
      */
-    public static <T> ApiResponse<Object> failure(int code, String message)
+    public static ApiResponse failure(int code, String message)
     {
         return new ApiResponse<>(false, null, code, message);
     }
@@ -58,10 +57,9 @@ public class ApiResponse<T>
     /**
      * 失败响应
      * @param message
-     * @param <T>
      * @return
      */
-    public static <T> ApiResponse<Object> failure(String message)
+    public static ApiResponse failure(String message)
     {
         return new ApiResponse<>(false, null, -1, message);
     }

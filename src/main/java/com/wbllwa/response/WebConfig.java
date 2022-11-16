@@ -16,13 +16,12 @@ public class WebConfig implements WebMvcConfigurer
 {
 
     /**
-     * 配置消息处理器，防止string转换异常
+     * 配置消息处理器，防止ApiResponseAdvice String转换异常
      * @param converters
      */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters)
     {
-        converters.clear();
         converters.add(0, new MappingJackson2HttpMessageConverter());
     }
 }

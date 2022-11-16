@@ -1,5 +1,6 @@
 package com.wbllwa.response;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -23,10 +24,30 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class ApiResponseAdvice implements ResponseBodyAdvice<Object>
 {
+
+    /**
+     * 全局异常处理
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler
+    public ApiResponse handlerException(Exception ex)
+    {
+        String errorMessage = "系统内部出错";
+        log.error(errorMessage, ex);
+        return ApiResponse.failure(-1, errorMessage);
+    }
+
+    /**
+     * API业务异常处理
+     * @param request
+     * @param ex
+     * @return
+     */
     @ExceptionHandler
     public ApiResponse handleApiException(HttpServletRequest request, ApiException ex)
     {
-        log.error("process url {} failed", request.getRequestURL().toString(), ex);
+        log.error(StrUtil.format("API 异常：{}", request.getRequestURL().toString()), ex);
         return ApiResponse.failure(ex.getErrorCode(), ex.getErrorMassage());
     }
 
