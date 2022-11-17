@@ -1,9 +1,14 @@
 package com.wbllwa.controller;
 
+import com.wbllwa.securefield.SecureField;
 import com.wbllwa.response.ApiException;
-import com.wbllwa.version.ApiVersion;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
 
 /**
  * 测试controller
@@ -16,13 +21,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("test")
 public class TestController
 {
-    @ApiVersion("v1")
-    @GetMapping(value = "{status}")
-    public String test(@PathVariable String status)
+//    @ApiVersion("v1")
+    @GetMapping
+    public Person test(@RequestBody Person person)
     {
-        if ("success".equalsIgnoreCase(status))
+        if (Objects.nonNull(person))
         {
-            return "成功咯";
+            return person;
         }
         else
         {
@@ -30,29 +35,14 @@ public class TestController
         }
     }
 
-    @GetMapping(value = "{test}")
-    public String test2(@PathVariable String test)
-    {
-        if ("success".equalsIgnoreCase(test))
-        {
-            return "成功咯";
-        }
-        else
-        {
-            throw new ApiException(2001, "失败了");
-        }
-    }
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    static class Person{
+        @SecureField(type = SecureField.Type.REQUEST)
+        private String name;
 
-    @GetMapping(value = "{test3}")
-    public String test3(@PathVariable String test3)
-    {
-        if ("success".equalsIgnoreCase(test3))
-        {
-            return "成功咯";
-        }
-        else
-        {
-            throw new ApiException(2001, "失败了");
-        }
+        @SecureField
+        private String age;
     }
 }
