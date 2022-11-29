@@ -1,4 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.wbllwa.version.ApiVersionAutoConfiguration,\
-com.wbllwa.response.ApiResponseAdvice,\
-com.wbllwa.minio.MinioAutoConfiguration

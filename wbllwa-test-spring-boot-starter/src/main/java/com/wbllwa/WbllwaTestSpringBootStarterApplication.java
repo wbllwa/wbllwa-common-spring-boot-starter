@@ -4,11 +4,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WbllwaCommonSpringBootStarterApplication
+public class WbllwaTestSpringBootStarterApplication
 {
 	public static void main(String[] args)
 	{
-		SpringApplication.run(WbllwaCommonSpringBootStarterApplication.class, args);
+		SpringApplication.run(WbllwaTestSpringBootStarterApplication.class, args);
 	}
 
 }
