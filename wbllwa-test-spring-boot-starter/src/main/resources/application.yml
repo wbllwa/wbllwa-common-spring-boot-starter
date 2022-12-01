@@ -1,7 +1,9 @@
 
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: 123456
-    url: jdbc:mysql://192.168.0.180:3306/remote-camera?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&maxReconnects=3&rewriteBatchedStatements=true
+  profiles:
+    active: company
+
+logging:
+  level:
+    org.springframework.security.web: debug
+

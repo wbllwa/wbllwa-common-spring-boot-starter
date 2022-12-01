@@ -1,0 +1,14 @@
+
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://127.0.0.1:3306/remote-camera?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&maxReconnects=3&rewriteBatchedStatements=true
+
+  redis:
+    host: 192.190.10.161
+    password: "Spinfo@Redis@0123"
+    port: 6379
+    database: 10
