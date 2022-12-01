@@ -13,11 +13,6 @@ import lombok.Data;
 public class ApiResponse<T>
 {
     /**
-     * 是否成功
-     */
-    private boolean success;
-
-    /**
      * 返回结果
      */
     private T data;
@@ -40,7 +35,7 @@ public class ApiResponse<T>
      */
     public static <T> ApiResponse<T> success(T data)
     {
-        return new ApiResponse<>(true, data, 0, "");
+        return new ApiResponse<>(data, 0, "");
     }
 
     /**
@@ -51,7 +46,7 @@ public class ApiResponse<T>
      */
     public static ApiResponse failure(int code, String message)
     {
-        return new ApiResponse<>(false, null, code, message);
+        return new ApiResponse<>(null, code, message);
     }
 
     /**
@@ -61,7 +56,7 @@ public class ApiResponse<T>
      */
     public static ApiResponse failure(String message)
     {
-        return new ApiResponse<>(false, null, -1, message);
+        return new ApiResponse<>(null, -1, message);
     }
 
 }
