@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author libw
  * @since 2022/11/11 15:00
  */
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "com.wbllwa.controller")
 @Slf4j
 public class ApiResponseAdvice implements ResponseBodyAdvice<Object>
 {
