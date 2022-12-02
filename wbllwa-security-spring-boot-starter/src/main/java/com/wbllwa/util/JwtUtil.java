@@ -2,17 +2,15 @@ package com.wbllwa.util;
 
 import com.wbllwa.domain.LoginUser;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.stereotype.Component;
-
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
+import org.springframework.stereotype.Component;
 
 /**
  * Jwt工具类
@@ -35,15 +33,10 @@ public class JwtUtil
     public static final String BEARER = "Bearer ";
     public static final String HEADER_KEY = "Authorization";
 
-    /**
-     *
-     */
     private final String CLAIMS_KEY_USERNAME = "sub";
+    private final String CLAIMS_KEY_CREATED = "created";
 
-    /**
-     *
-     */
-    private final String CLAIMS_KEY_CREATED = "sub";
+    SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS512;
 
     public String generateToken(LoginUser loginUser)
     {
@@ -58,7 +51,7 @@ public class JwtUtil
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(generateExpirationDate())
-                .signWith(SignatureAlgorithm.HS512, base64Security)
+                .signWith(signatureAlgorithm, base64Security)
                 .compact();
     }
 
@@ -67,20 +60,20 @@ public class JwtUtil
      * @param token
      * @return
      */
-    public String getUserNameFromToken(String token)
+    public String getUserIdFromToken(String token)
     {
         Claims claims = getClaimsFromToken(token);
-        String username = claims.getSubject();
-        return username;
+        return (String)claims.get(CLAIMS_KEY_USERNAME);
     }
 
     private Claims getClaimsFromToken(String token)
     {
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(base64Security);
+        Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
         return Jwts.parser()
-                .setSigningKey(base64Security)
+                .setSigningKey(signingKey)
                 .parseClaimsJws(token)
                 .getBody();
-
     }
 
     /**
@@ -90,91 +83,5 @@ public class JwtUtil
     private Date generateExpirationDate()
     {
         return new Date(System.currentTimeMillis() + expiration);
-    }
-
-
-    /**
-     * 新建token
-     * @param audience
-     * @param issuer
-     * @return
-     */
-//    public static String createToken(String audience, String issuer)
-//    {
-//        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-//
-//        long nowMillis = System.currentTimeMillis();
-//        Date now = new Date(nowMillis);
-//
-//        // 生成签名密钥
-//        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(base64Security);
-//        Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-//
-//        // 添加构成JWT的参数
-//        JwtBuilder builder = Jwts.builder()
-//                .setHeaderParam("typ", "JWT")
-//                .setIssuer(issuer)
-//                .setAudience(audience)
-//                .signWith(signatureAlgorithm, signingKey);
-//
-//        // 添加Token签发时间
-//        builder.setIssuedAt(now);
-//        // 添加Token过期时间
-//        if (expiration >= 0) {
-//            long expMillis = nowMillis + expiration;
-//            Date exp = new Date(expMillis);
-//            builder.setExpiration(exp).setNotBefore(now);
-//        }
-//
-//        // 生成JWT
-//        return builder.compact();
-//    }
-
-    /**
-     * 解析token
-     * @param jsonWebToken
-     * @return
-     */
-    public Claims parseToken(String jsonWebToken) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(DatatypeConverter.parseBase64Binary(base64Security))
-                .parseClaimsJwt(jsonWebToken)
-                .getBody();
-
-        return claims;
-    }
-
-    /**
-     * 刷新令牌
-     *
-     * @param claims
-     * @return
-     */
-    public String refreshToken(Claims claims) {
-        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-
-        long nowMillis = System.currentTimeMillis();
-        Date now = new Date(nowMillis);
-
-        // 生成签名密钥
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(base64Security);
-        Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-
-        // 添加构成JWT的参数
-        JwtBuilder builder = Jwts.builder().setHeaderParam("typ", "JWT")
-                .setIssuer((String) claims.get("iss")).setAudience((String) claims.get("aud"))
-                .signWith(signatureAlgorithm, signingKey);
-
-        // 添加Token签发时间
-        builder.setIssuedAt(now);
-        // 添加Token过期时间
-        if (expiration >= 0) {
-            long expMillis = nowMillis + expiration;
-            Date exp = new Date(expMillis);
-            builder.setExpiration(exp).setNotBefore(now);
-        }
-
-        // 生成Token
-        return builder.compact();
     }
 }

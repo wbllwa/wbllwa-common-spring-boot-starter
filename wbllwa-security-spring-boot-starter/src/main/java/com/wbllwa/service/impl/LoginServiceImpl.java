@@ -1,7 +1,7 @@
 package com.wbllwa.service.impl;
 
+import com.wbllwa.domain.LoginRequest;
 import com.wbllwa.domain.LoginUser;
-import com.wbllwa.domain.User;
 import com.wbllwa.response.ApiException;
 import com.wbllwa.service.LoginService;
 import com.wbllwa.service.RedisService;
@@ -35,7 +35,8 @@ public class LoginServiceImpl implements LoginService
     @Override
     public Map<String, String> login(LoginRequest loginRequest)
     {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+            loginRequest.getUsername(), loginRequest.getPassword());
         // 登陆认证
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
 

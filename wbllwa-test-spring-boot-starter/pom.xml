@@ -17,6 +17,12 @@
             <artifactId>wbllwa-security-spring-boot-starter</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.wbllwa</groupId>
+            <artifactId>wbllwa-plugin-spring-boot-starter</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
