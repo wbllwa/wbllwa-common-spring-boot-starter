@@ -3,6 +3,10 @@ spring:
   profiles:
     active: company
 
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
 logging:
   level:
     org.springframework.security.web: debug

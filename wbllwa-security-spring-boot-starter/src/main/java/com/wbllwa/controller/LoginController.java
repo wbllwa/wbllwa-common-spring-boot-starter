@@ -14,6 +14,7 @@ import java.util.Map;
  * @author libw
  * @since 2022/11/22 16:13
  */
+@Api("登录接口")
 @RestController
 @RequestMapping("user")
 public class LoginController
