@@ -1,6 +1,6 @@
 package com.wbllwa.service;
 
-import com.wbllwa.domain.User;
+import com.wbllwa.domain.LoginRequest;
 
 import java.util.Map;
 
@@ -13,8 +13,8 @@ public interface LoginService
 {
     /**
      * 用户登陆
-     * @param user 用户名密码
+     * @param loginRequest 用户名密码
      * @return token
      */
-    Map<String, String> login(User user);
+    Map<String, String> login(LoginRequest loginRequest);
 }

@@ -33,7 +33,7 @@ public class LoginServiceImpl implements LoginService
     private RedisService redisService;
 
     @Override
-    public Map<String, String> login(User user)
+    public Map<String, String> login(LoginRequest loginRequest)
     {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
         // 登陆认证
