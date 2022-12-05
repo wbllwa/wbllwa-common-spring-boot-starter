@@ -4,13 +4,16 @@ import com.wbllwa.domain.LoginUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
+
+import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
-import org.springframework.stereotype.Component;
 
 /**
  * Jwt工具类
@@ -60,10 +63,10 @@ public class JwtUtil
      * @param token
      * @return
      */
-    public String getUserIdFromToken(String token)
+    public Long getUserIdFromToken(String token)
     {
         Claims claims = getClaimsFromToken(token);
-        return (String)claims.get(CLAIMS_KEY_USERNAME);
+        return (Long)claims.get(CLAIMS_KEY_USERNAME);
     }
 
     private Claims getClaimsFromToken(String token)
@@ -83,5 +86,25 @@ public class JwtUtil
     private Date generateExpirationDate()
     {
         return new Date(System.currentTimeMillis() + expiration);
+    }
+
+    /**
+     * 获取token
+     * @param request
+     * @return
+     */
+    public String getToken(HttpServletRequest request)
+    {
+        String header = request.getHeader(JwtUtil.HEADER_KEY);
+        if (StringUtils.isEmpty(header)) {
+            return null;
+        }
+
+        if (!StringUtils.startsWith(header, JwtUtil.BEARER))
+        {
+            return null;
+        }
+
+        return header.substring(JwtUtil.BEARER.length());
     }
 }

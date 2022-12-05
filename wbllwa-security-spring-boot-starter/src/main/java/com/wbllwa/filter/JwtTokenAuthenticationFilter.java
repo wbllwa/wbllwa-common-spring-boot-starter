@@ -1,10 +1,13 @@
 package com.wbllwa.filter;
 
 import cn.hutool.extra.spring.SpringUtil;
+import com.wbllwa.contants.Contant;
 import com.wbllwa.service.RedisService;
 import com.wbllwa.util.JwtUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -33,18 +36,34 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter
         JwtUtil jwtUtil = SpringUtil.getBean(JwtUtil.class);
         RedisService redisService = SpringUtil.getBean(RedisService.class);
 
-        String header = request.getHeader(JwtUtil.HEADER_KEY);
-        if (StringUtils.isEmpty(header)) {
+        String token = jwtUtil.getToken(request);
+        if (StringUtils.isEmpty(token)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String token = header.substring(JwtUtil.BEARER.length());
-        String userId = jwtUtil.getUserIdFromToken(token);
+        Long userId;
+        try
+        {
+            userId = jwtUtil.getUserIdFromToken(token);
+        }
+        catch (ExpiredJwtException e)
+        {
+            throw new BadCredentialsException("token已过期，请重新登陆", e);
+        }
+        catch (Exception e)
+        {
+            throw new BadCredentialsException("token获取失败", e);
+        }
 
-        String username = redisService.get("login:" + userId);
+        String username = redisService.get(Contant.LOGIN_KEY + userId);
+        if (StringUtils.isEmpty(username))
+        {
+            throw new BadCredentialsException("用户未登录，请重新登陆");
+        }
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, null);
+        UsernamePasswordAuthenticationToken authenticationToken = UsernamePasswordAuthenticationToken
+                .authenticated(username, null, null);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         filterChain.doFilter(request, response);

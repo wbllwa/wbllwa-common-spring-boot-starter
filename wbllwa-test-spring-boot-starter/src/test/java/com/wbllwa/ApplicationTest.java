@@ -1,5 +1,7 @@
 package com.wbllwa;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.wbllwa.domain.LoginUser;
 import com.wbllwa.domain.User;
 import com.wbllwa.mapper.UserMapper;
@@ -26,12 +28,22 @@ public class ApplicationTest {
   public void testJwt() {
     LoginUser loginUser = new LoginUser();
     User user = new User();
-    user.setId("111");
+    user.setId(111L);
     user.setUsername("libw");
     loginUser.setUser(user);
     String token = jwtUtil.generateToken(loginUser);
     System.out.println(token);
 
     System.out.println(jwtUtil.getUserIdFromToken(token));
+  }
+
+  @Test
+  public void testSql()
+  {
+    User user = new User();
+    user.setUsername("libw");
+    LambdaQueryWrapper<User> queryWrapper = Wrappers.lambdaQuery();
+    queryWrapper.eq(User::getUsername, user.getUsername());
+    System.out.println(userMapper.exists(queryWrapper));
   }
 }

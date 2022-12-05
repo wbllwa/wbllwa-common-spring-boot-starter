@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -56,7 +58,7 @@ public class SecurityConfiguration
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers("/user/login")
+            .antMatchers("/user/login", "/user/register")
             .permitAll()
             .anyRequest()
             .authenticated();
@@ -68,9 +70,9 @@ public class SecurityConfiguration
      * 设置密码加密方式
      * @return
      */
-//     @Bean
-//    public PasswordEncoder passwordEncoder()
-//     {
-//         return new BCryptPasswordEncoder();
-//     }
+     @Bean
+    public PasswordEncoder passwordEncoder()
+     {
+         return new BCryptPasswordEncoder();
+     }
 }
